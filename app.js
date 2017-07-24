@@ -1,14 +1,11 @@
 'use strict';
-const PORT = 4446;
+
 var express = require('express');
 var app = express();
 var bodyParser = require('body-parser')
-var server = require('http').createServer(app).listen(PORT);
 var network = require('./network');
-var localIp;
-//var portName = process.argv[2]; // 2do argumento de la llamada!
 
-
+app.set('port', (process.env.PORT || 5000));
 app.set('superSecret', 'mmm');
 
 app.use( bodyParser.json() );       // to support JSON-encoded bodies
@@ -40,4 +37,8 @@ app.post('/train',function (req,res)
   else {
     res.json({success:false});
   }
+});
+
+app.listen(app.get('port'), function() {
+  console.log('Node app is running on port', app.get('port'));
 });
