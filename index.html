@@ -352,6 +352,7 @@
       {
         if(game[result] == 0)
         {
+          entrenamientoSigiloso(result);
           game[result] = 1;
           if(humanFirst)
             $(cells[result]).addClass("circle");
