@@ -29,9 +29,9 @@ module.exports =
     let trainer = new Trainer(network);
     result = trainer.train(set,
     {
-      rate: .2,
-    	iterations: 1000,
-    	error: .0005,
+      rate: .3,
+    	iterations: 2000,
+    	error: .005,
     	shuffle: false,
     	log: 100000,
     	cost: Trainer.cost.CROSS_ENTROPY
