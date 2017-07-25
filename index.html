@@ -371,6 +371,12 @@
       function entrenar()
       {
         let jugada = buscarMejorJuego(game);
+        sendTraining(judada, true);
+
+      }
+
+      function sendTraining(jugada, humanPlay)
+      {
         let str = (jugada).toString(2);
         while(str.length !=4)
         {
@@ -394,16 +400,27 @@
           dataType: 'json',
           success:function (data)
           {
-            game[jugada] = 1;
-            if(humanFirst)
-              $(cells[jugada]).addClass("circle");
-            else
-              $(cells[jugada]).addClass("cross");
-            humanTurn();
+            if(humanPlay)
+            {
+              game[jugada] = 1;
+              if(humanFirst)
+                $(cells[jugada]).addClass("circle");
+              else
+                $(cells[jugada]).addClass("cross");
+              humanTurn();
+            }
           }
         });
 
+      }
 
+      function entrenamientoSigiloso(result)
+      {
+        let jugada = buscarMejorJuego(game);
+        if(result != jugada && jugada != null)
+        {
+          sendTraining(jugada,false);
+        }
       }
 
       function buscarMejorJuego(m)

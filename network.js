@@ -1,4 +1,6 @@
-var synaptic = require('synaptic');
+const synaptic = require('synaptic');
+const fs = require('fs');
+const networkFileName = "ann.json";
 const inputs = 9;
 const hiddenNeurons = 10;
 const output = 4;
@@ -27,21 +29,52 @@ module.exports =
     let trainer = new Trainer(network);
     result = trainer.train(set,
     {
-      rate: .1,
-    	iterations: 20000,
+      rate: .2,
+    	iterations: 1000,
     	error: .0005,
-    	shuffle: true,
+    	shuffle: false,
     	log: 100000,
     	cost: Trainer.cost.CROSS_ENTROPY
     });
     res.json({success:true, result:result, sim:sim(param)});
+  },
 
-  }
+	save: function (res)
+	{
+		fs.unlinkSync(networkFileName, function (err)
+		{
+			if(!err)
+			{
+				fs.writeFile(networkFileName, JSON.stringify(network.toJSON()), function(err)
+				{
+						if(err) {
+								res.json({success:false});
+								return;
+						}
+						res.json({success:true,network:network.toJSON()});
+				});
+			}
+		});
+	},
+
+	load: function (res)
+	{
+		fs.readFile(networkFileName, 'utf8', function(err, data)
+		{
+			if(err) {
+					res.json({success:false});
+					return;
+			}
+			let json = JSON.parse(data);
+			network.fromJSON(json);
+			res.json({success:true,savedData:json});
+		});
+	}
+
 }
 
 function sim(param)
 {
-
   out = network.activate(param);
   let n = 0;
   for (var i = 0; i < out.length; i++)

@@ -39,6 +39,16 @@ app.post('/train',function (req,res)
   }
 });
 
+app.post('/save', function (req,res)
+{
+  network.save(res);
+});
+
+app.post('/load', function (req,res)
+{
+  network.load(res);
+});
+
 app.listen(app.get('port'), function() {
   console.log('Node app is running on port', app.get('port'));
 });
