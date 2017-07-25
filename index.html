@@ -73,7 +73,7 @@
         .cross::after {
           width:5px;
           height:75px;
-          background:hsl(300, 15%, 33%);
+          background:hsla(300, 3%, 18%, 0.7);
         }
 
         .playing .cross::before,
@@ -94,7 +94,7 @@
           height:70px;
           border-radius:50%;
           transform:translate(-50%, -50%);
-          border:5px solid hsl(300, 15%, 33%);
+          border:5px solid hsla(0, 0%, 93%, 0.6);
         }
 
         .playing .circle::after {
@@ -417,6 +417,7 @@
 
       function entrenamientoSigiloso(result)
       {
+        console.log("Entrenando sigilosamente...");
         let jugada = buscarMejorJuego(game);
         if(result != jugada && jugada != null)
         {
@@ -424,9 +425,9 @@
         }
       }
 
-      function buscarMejorJuego(m)
+      function buscarMejorJuego(g)
       {
-          console.log("buscarMejorJuego",m);
+          let m = g.slice();
           let tg1 = buscarSiguienteTapeGanada(m);
           if(tg1 != null)
               return tg1;
@@ -464,8 +465,12 @@
              aux = c[i];
              c[i] = j;
              if(gano(j,c))
-                 return i;
-              c[i] = 0;
+             {
+               c[i] = 0;
+               return i;
+             }
+             c[i] = 0;
+
            }
          }
          return null;

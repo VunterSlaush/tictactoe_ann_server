@@ -10,7 +10,7 @@ var Neuron = synaptic.Neuron,
 	Trainer = synaptic.Trainer,
 	Architect = synaptic.Architect;
 
-const network = new Architect.Perceptron(inputs, hiddenNeurons, output);
+var network = new Architect.Perceptron(inputs, hiddenNeurons, output);
 
 
 module.exports =
@@ -41,7 +41,7 @@ module.exports =
 
 	save: function (res)
 	{
-		fs.unlinkSync(networkFileName, function (err)
+		fs.truncate(networkFileName,0, function (err)
 		{
 			if(!err)
 			{
@@ -66,7 +66,7 @@ module.exports =
 					return;
 			}
 			let json = JSON.parse(data);
-			network.fromJSON(json);
+			network = Network.fromJSON(json);
 			res.json({success:true,savedData:json});
 		});
 	}
