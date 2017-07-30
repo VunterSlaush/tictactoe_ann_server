@@ -2,7 +2,7 @@ const synaptic = require('synaptic');
 const fs = require('fs');
 const networkFileName = "ann.json";
 const inputs = 9;
-const hiddenNeurons = 10;
+const hiddenNeurons = 24;
 const output = 4;
 var Neuron = synaptic.Neuron,
 	Layer = synaptic.Layer,
@@ -12,6 +12,14 @@ var Neuron = synaptic.Neuron,
 
 var network = new Architect.Perceptron(inputs, hiddenNeurons, output);
 
+
+loadNetwork(function (json)
+{
+	if(json != null)
+		console.log("Cargada ANN desde Archivo");
+	else
+		console.log("La ANN no pudo ser cargada");
+});
 
 module.exports =
 {
@@ -59,15 +67,12 @@ module.exports =
 
 	load: function (res)
 	{
-		fs.readFile(networkFileName, 'utf8', function(err, data)
+		loadNetwork(function (json)
 		{
-			if(err) {
-					res.json({success:false});
-					return;
-			}
-			let json = JSON.parse(data);
-			network = Network.fromJSON(json);
-			res.json({success:true,savedData:json});
+			if(json != null)
+				res.json({success:true,savedData:json});
+			else
+				res.json({success:false});
 		});
 	}
 
@@ -82,4 +87,20 @@ function sim(param)
     n += Math.round(out[i]) * Math.pow(2,((out.length -1) - i));
   }
   return n;
+}
+
+function loadNetwork(callback)
+{
+	fs.readFile(networkFileName, 'utf8', function(err, data)
+	{
+		if(err) {
+				callback(null);
+		}else
+		{
+			let json = JSON.parse(data);
+			network = Network.fromJSON(json);
+			callback(json);
+		}
+
+	});
 }
